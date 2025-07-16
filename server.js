@@ -1,4 +1,6 @@
 // server.js file
+const da = require("./data-access");
+
 const express = require('express');
 const path = require('path');  // for handling file paths
 
@@ -11,3 +13,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+app.get("/customers", async (req, res) => {
+ const cust = await da.getCustomers();
+ res.send(cust); 
+});
+

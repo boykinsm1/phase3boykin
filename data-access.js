@@ -1,6 +1,6 @@
 // data-access.js file
 const MongoClient = require('mongodb').MongoClient;
-const dbName = 'customersnew';
+const dbName = 'custdb';
 const baseUrl = "mongodb://127.0.0.1:27017";
 const collectionName = "customers"
 const connectString = baseUrl + "/" + dbName; 

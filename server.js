@@ -1,4 +1,5 @@
 // server.js file
+const sec = require("./security")
 const bodyParser = require('body-parser');
 const da = require("./data-access");
 
@@ -17,7 +18,7 @@ app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
 
-app.get("/customers", async (req, res) => {
+app.get("/customers", sec.checkHeaderAuth, async (req, res) => {
      const [cust, err] = await da.getCustomers();
      if(cust){
          res.send(cust);
@@ -27,7 +28,7 @@ app.get("/customers", async (req, res) => {
      }   
 });
 
-app.get("/reset", async (req, res) => {
+app.get("/reset", sec.checkHeaderAuth, async (req, res) => {
     const [result, err] = await da.resetCustomers();
     if(result){
         res.send(result);
@@ -37,7 +38,7 @@ app.get("/reset", async (req, res) => {
     }   
 });
 
-app.post('/customers', async (req, res) => {
+app.post('/customers', sec.checkHeaderAuth, async (req, res) => {
     const newCustomer = req.body;
     if (newCustomer === null || req.body == {}) {
         res.status(400);
@@ -57,7 +58,7 @@ app.post('/customers', async (req, res) => {
     }
 });
 
-app.get("/customers/:id", async (req, res) => {
+app.get("/customers/:id", sec.checkHeaderAuth, async (req, res) => {
      const id = req.params.id;
      // return array [customer, errMessage]
      const [cust, err] = await da.getCustomerById(id);
@@ -69,7 +70,7 @@ app.get("/customers/:id", async (req, res) => {
      }   
 });
 
-app.put('/customers/:id', async (req, res) => {
+app.put('/customers/:id', sec.checkHeaderAuth, async (req, res) => {
     const id = req.params.id;
     const updatedCustomer = req.body;
     if (updatedCustomer === null ) {
@@ -88,7 +89,7 @@ app.put('/customers/:id', async (req, res) => {
     }
 });
 
-app.delete("/customers/:id", async (req, res) => {
+app.delete("/customers/:id", sec.checkHeaderAuth, async (req, res) => {
     const id = req.params.id;
     // return array [message, errMessage]
     const [message, errMessage] = await da.deleteCustomerById(id);
